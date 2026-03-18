@@ -1,0 +1,61 @@
+﻿<!-- 
+     Esto es un PartialVIew, se utiliza para centralizar codigo que va a ser utilizado multiples veces,Como puede ser por ejemplo un formulario,
+     en este caso el formulario para agregar y editar categorias, ya que ambos formularios son iguales, lo unico que cambia es la accion 
+     a la que se va a enviar el formulario, por eso se utiliza el ViewBag para pasar la accion a la que se va a enviar 
+     el formulario, y asi evitar tener que crear dos vistas diferentes para agregar y editar categorias, lo cual seria redundante.
+-->
+
+
+<!--
+    Para poder instanciar este partial view antes se tiene que haber instanciado la accion que corresponde a este en el controlador
+    de una manera similar a esta:
+
+    public IActionResult Add()
+    {
+        ViewBag.Action = "Add"; <-- Siendo esta la linea a agregar para dar a saber la accion a la que se va a enviar el formulario
+        return View(Category);
+    }
+-->
+
+@model Category
+@{
+    string action = ViewBag.Action ?? string.Empty;
+}
+
+<form method="post" asp-controller="categories" asp-action="@action">
+    @if (action?.ToLower() == "edit")
+        {
+        <input type="hidden" asp-for="CategoryId" />
+        }
+    <!-- Mostrar errores en conjunto en forma de lista -->
+    <div class="text-danger" asp-validation-summary="All"></div>
+    <div class="row mb-3">
+        <div class="col-2">
+            <label asp-for="Name" class="col-form-label"></label>
+        </div>
+        <div class="col-6">
+            <input type="text" asp-for="Name" class="form-control"></input>
+        </div>
+        <!-- Mostrar errores seguidos del campo que tiene ese error -->
+        <div class="col">
+            <span class="text-danger" asp-validation-for="Name"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-2">
+            <label asp-for="Description" class="col-form-label"></label>
+        </div>
+        <div class="col-6">
+            <input type="text" asp-for="Description" class="form-control"></input>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-2">
+            <input type="submit" class="btn btn-primary" value="Save" />
+        </div>
+        <div class="col-6">
+        </div>
+    </div>
+</form>
